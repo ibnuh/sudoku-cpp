@@ -8,23 +8,8 @@ using namespace std;
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 
-void render(int x, int y, int newValue){
+void render(int playground[9][9], int x, int y, int newValue){
 	system("cls");
-	int playground[9][9] = {
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-	};
-	
-	if(newValue != 10){
-		playground[y][x] = newValue;
-	}
 	
 	cout << endl << " -------------------------------------------------------" << endl;
 	for(int row = 0; row < 9; row++){
@@ -46,14 +31,25 @@ int main(){
 	int x, y = 0;
 	int newVal = 10;
 	
-	render(x, y, newVal);
+	int playground[9][9] = {
+		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+	};
+	
+	render(playground, x, y, newVal);
 	
 	while(true)
     {
         int buttonCode = 0;
-        newVal = 10;
 
-        switch((buttonCode=getch())) {
+        switch(buttonCode = getch()) {
 	        case KEY_UP:
 	        	if(y != 0) y--;
 	            cout << endl << "Up" << endl;
@@ -72,12 +68,12 @@ int main(){
 	            break;
 	        default:
 	        	if(buttonCode >= 49 && buttonCode <= 57){
-	        		newVal = (int)buttonCode;
+					playground[y][x] = (int)buttonCode;
 				}
 	            break;
 	        }
 		
-		render(x, y, newVal);
+		render(playground, x, y, newVal);
 		
 		cout << "x: " << x;
 		cout << "y: " << y;

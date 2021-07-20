@@ -20,14 +20,14 @@ void render(int playground[9][9], int x, int y, int newValue){
 	cout << "  ____) | |_| | (_| | (_) |   <| |_| |" << endl;
 	cout << " |_____/ \\__,_|\\__,_|\\___/|_|\\_\\\\__,_|" << endl;
 	
-	cout << endl << " -------------------------------------------------------" << endl;
+	cout << endl << " +-----------------+-----------------+-----------------+" << endl;
 	for(int row = 0; row < 9; row++){
 		cout << " |  ";
 		for(int column = 0; column < 9; column++){
 			int currentNumber = playground[row][column];
 			
 			if (currentNumber == 0){
-				if(x == column && y == row){
+				if (x == column && y == row){
 					cout << "_  |  ";
 				}
 				else {
@@ -35,7 +35,7 @@ void render(int playground[9][9], int x, int y, int newValue){
 				}
 			}
 			else {
-				if(x == column && y == row){
+				if (x == column && y == row){
 					cout << setw(1) << currentNumber << "*" << setw(4);
 					cout << "|  ";
 				}
@@ -44,7 +44,13 @@ void render(int playground[9][9], int x, int y, int newValue){
 				}
 			}
 		}
-		cout << endl << " -------------------------------------------------------" << endl;
+		
+		if((row + 1) % 3 == 0){
+			cout << endl << " +-----------------+-----------------+-----------------+" << endl;
+		}
+		else{
+			cout << endl << " -------------------------------------------------------" << endl;
+		}
 	}
 }
 

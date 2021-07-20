@@ -13,6 +13,13 @@ using namespace std;
 void render(int playground[9][9], int x, int y, int newValue){
 	system("cls");
 	
+	cout << "   _____           _       _          " << endl;
+	cout << "  / ____|         | |     | |         " << endl;
+	cout << " | (___  _   _  __| | ___ | | ___   _ " << endl;
+	cout << "  \\___ \\| | | |/ _` |/ _ \\| |/ / | | |" << endl;
+	cout << "  ____) | |_| | (_| | (_) |   <| |_| |" << endl;
+	cout << " |_____/ \\__,_|\\__,_|\\___/|_|\\_\\\\__,_|" << endl;
+	
 	cout << endl << " -------------------------------------------------------" << endl;
 	for(int row = 0; row < 9; row++){
 		cout << " |  ";

@@ -1,5 +1,7 @@
 #include <iostream>
 #include <conio.h>
+#include <stdlib.h>
+#include <iomanip>
 
 using namespace std;
 
@@ -16,11 +18,11 @@ void render(int playground[9][9], int x, int y, int newValue){
 		cout << " |  ";
 		for(int column = 0; column < 9; column++){
 			if(x == column && y == row){
-				cout << playground[row][column] << "¦¦";
+				cout << setw(1) << playground[row][column] << "*" << setw(4);
 				cout << "|  ";
 			}
 			else{
-				cout << playground[row][column] << "  |  ";	
+				cout << setw(1) << playground[row][column] << "  |  " << setw(2);
 			}
 		}
 		cout << endl << " -------------------------------------------------------" << endl;
@@ -28,6 +30,7 @@ void render(int playground[9][9], int x, int y, int newValue){
 }
 
 int main(){
+	
 	int x, y = 0;
 	int newVal = 10;
 	
@@ -68,7 +71,7 @@ int main(){
 	            break;
 	        default:
 	        	if(buttonCode >= 49 && buttonCode <= 57){
-					playground[y][x] = (int)buttonCode;
+						playground[y][x] = char(buttonCode);
 				}
 	            break;
 	        }

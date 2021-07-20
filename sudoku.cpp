@@ -24,12 +24,24 @@ void render(int playground[9][9], int x, int y, int newValue){
 	for(int row = 0; row < 9; row++){
 		cout << " |  ";
 		for(int column = 0; column < 9; column++){
-			if(x == column && y == row){
-				cout << setw(1) << playground[row][column] << "*" << setw(4);
-				cout << "|  ";
+			int currentNumber = playground[row][column];
+			
+			if (currentNumber == 0){
+				if(x == column && y == row){
+					cout << "_  |  ";
+				}
+				else {
+					cout << "   |  ";
+				}
 			}
-			else{
-				cout << setw(1) << playground[row][column] << "  |  " << setw(2);
+			else {
+				if(x == column && y == row){
+					cout << setw(1) << currentNumber << "*" << setw(4);
+					cout << "|  ";
+				}
+				else{
+					cout << setw(1) << currentNumber << "  |  " << setw(2);
+				}
 			}
 		}
 		cout << endl << " -------------------------------------------------------" << endl;
@@ -42,14 +54,14 @@ int main(){
 	int newVal = 10;
 	
 	int playground[9][9] = {
+		{ 0, 2, 3, 4, 5, 6, 7, 8, 9 },
+		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+		{ 1, 2, 3, 4, 5, 6, 7, 0, 9 },
+		{ 1, 2, 3, 0, 5, 6, 7, 8, 9 },
 		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
 		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
 		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+		{ 1, 2, 3, 4, 5, 6, 7, 0, 9 },
 		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
 	};
 	

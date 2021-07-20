@@ -96,7 +96,7 @@ int main(){
 	            break;
 	        default:
 	        	if(buttonCode >= 49 && buttonCode <= 57){
-						playground[y][x] = char(buttonCode);
+						playground[y][x] = buttonCode - '0'; // Convert ascii number to a real character
 				}
 	            break;
 	        }

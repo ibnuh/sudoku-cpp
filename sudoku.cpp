@@ -10,7 +10,7 @@ using namespace std;
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 
-void render(int playground[9][9], int x, int y, int newValue){
+void render(int playground[9][9], int x, int y){
 	system("cls");
 	
 	cout << "   _____           _       _          " << endl;
@@ -57,7 +57,6 @@ void render(int playground[9][9], int x, int y, int newValue){
 int main(){
 	
 	int x, y = 0;
-	int newVal = 10;
 	
 	int playground[9][9] = {
 		{ 0, 0, 0, 0, 3, 2, 0, 5, 7 },
@@ -71,7 +70,7 @@ int main(){
 		{ 0, 0, 2, 0, 1, 0, 0, 0, 9 },
 	};
 	
-	render(playground, x, y, newVal);
+	render(playground, x, y);
 	
 	while(true)
     {
@@ -80,19 +79,15 @@ int main(){
         switch(buttonCode = getch()) {
 	        case KEY_UP:
 	        	if(y != 0) y--;
-	            cout << endl << "Up" << endl;
 	            break;
 	        case KEY_DOWN:
 	        	if(y != 8) y++;
-	            cout << endl << "Down" << endl;
 	            break;
 	        case KEY_LEFT:
 	        	if(x != 0) x--;
-	            cout << endl << "Left" << endl;
 	            break;
 	        case KEY_RIGHT:
 	        	if(x != 8) x++;
-	            cout << endl << "Right" << endl;
 	            break;
 	        default:
 	        	if(buttonCode >= 48 && buttonCode <= 57){
@@ -101,10 +96,7 @@ int main(){
 	            break;
 	        }
 		
-		render(playground, x, y, newVal);
-		
-		cout << "x: " << x;
-		cout << "y: " << y;
+		render(playground, x, y);
     }
 	
 	system("pause");

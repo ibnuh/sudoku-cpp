@@ -24,54 +24,54 @@ void render(int playground[9][9], int x, int y) {
     cout << "  \\___ \\| | | |/ _` |/ _ \\| |/ / | | |" << endl;
     cout << "  ____) | |_| | (_| | (_) |   <| |_| | by M. IBNU LUTHFI AZHAR " << endl;
     cout << " |_____/ \\__,_|\\__,_|\\___/|_|\\_\\\\__,_| 200401067" << endl << endl;
-    
+
     cout << " /-----------------/-----------------/-----------------/" << endl;
-	cout << " | .5. |     |     |     |     |     |     |     |     |" << endl;
-	cout << " -------------------------------------------------------" << endl;
-	cout << " |     |     |     |     |     |     |     |     |     |" << endl;
-	cout << " -------------------------------------------------------" << endl;
-	cout << " |     |     |     |     |     |     |     |     |     |" << endl;
-	cout << " /-----------------/-----------------/-----------------/" << endl;
-	cout << " |     |     |     |     |     |     |     |     |     |" << endl;
-	cout << " -------------------------------------------------------" << endl;
-	cout << " |     |     |     |     |     |     |     |     |     |" << endl;
-	cout << " -------------------------------------------------------" << endl;
-	cout << " |     |     |     |     |     |     |     |     |     |" << endl;
-	cout << " /-----------------/-----------------/-----------------/" << endl;
-	cout << " |     |     |     |     |     |     |     |     |     |" << endl;
-	cout << " -------------------------------------------------------" << endl;
-	cout << " |     |     |     |     |     |     |     |     |     |" << endl;
-	cout << " -------------------------------------------------------" << endl;
-	cout << " |     |     |     |     |     |     |     |     |     |" << endl;
-	cout << " /-----------------/-----------------/-----------------/" << endl;
-	
-	const int initX = 4, initY = 9, gapX = 6, gapY = 2;
+    cout << " |     |     |     |     |     |     |     |     |     |" << endl;
+    cout << " -------------------------------------------------------" << endl;
+    cout << " |     |     |     |     |     |     |     |     |     |" << endl;
+    cout << " -------------------------------------------------------" << endl;
+    cout << " |     |     |     |     |     |     |     |     |     |" << endl;
+    cout << " /-----------------/-----------------/-----------------/" << endl;
+    cout << " |     |     |     |     |     |     |     |     |     |" << endl;
+    cout << " -------------------------------------------------------" << endl;
+    cout << " |     |     |     |     |     |     |     |     |     |" << endl;
+    cout << " -------------------------------------------------------" << endl;
+    cout << " |     |     |     |     |     |     |     |     |     |" << endl;
+    cout << " /-----------------/-----------------/-----------------/" << endl;
+    cout << " |     |     |     |     |     |     |     |     |     |" << endl;
+    cout << " -------------------------------------------------------" << endl;
+    cout << " |     |     |     |     |     |     |     |     |     |" << endl;
+    cout << " -------------------------------------------------------" << endl;
+    cout << " |     |     |     |     |     |     |     |     |     |" << endl;
+    cout << " /-----------------/-----------------/-----------------/" << endl;
+
+    const int initX = 4,
+        initY = 9,
+        gapX = 6,
+        gapY = 2;
 
     for (int row = 0; row < 9; row++) {
-    	int screenY = initY + (row * gapY);
-    	
+        int screenY = initY + (row * gapY);
+
         for (int column = 0; column < 9; column++) {
-        	int screenX = initX + (column * gapX);
+            int screenX = initX + (column * gapX);
             int currentNumber = playground[row][column];
-            
+
             donkey::locate(screenX, screenY);
-            
+
             if (x == column && y == row) { // Check if cursor is in current block
-            	if(currentNumber == 0) { // Treat 0 as empty block
-            		cout << " _ ";
-				}
-				else {
-					cout << "_" << currentNumber << "_";
-				}
+                if (currentNumber == 0) { // Treat 0 as empty block
+                    cout << "___";
+                } else {
+                    cout << "_" << currentNumber << "_";
+                }
+            } else {
+                if (currentNumber == 0) { // Treat 0 as empty block
+                    cout << "   ";
+                } else {
+                    cout << " " << currentNumber << " ";
+                }
             }
-            else {
-            	if(currentNumber == 0) { // Treat 0 as empty block
-            		cout << "   ";
-				}
-				else {
-					cout << " " << currentNumber << " ";
-				}
-			}
         }
     }
 }
@@ -92,33 +92,40 @@ int main() {
 		{ 0, 0, 2, 0, 1, 0, 0, 0, 9 },
 	};
 
-	// Render initial playground
+    // Render initial playground
     render(playground, x, y);
 
     while (true) {
         int buttonCode = 0;
 
         switch (buttonCode = getch()) {
-	        case KEY_UP:
-	            if (y != 0) y--;
-	            break;
-	        case KEY_DOWN:
-	            if (y != 8) y++;
-	            break;
-	        case KEY_LEFT:
-	            if (x != 0) x--;
-	            break;
-	        case KEY_RIGHT:
-	            if (x != 8) x++;
-	            break;
-	        default:
-	            if (buttonCode >= 48 && buttonCode <= 57) {
-	                playground[y][x] = buttonCode - '0'; // Convert ascii number to a real character
-	            }
-	            break;
+        case KEY_UP:
+            if (y != 0) y--;
+            break;
+        case KEY_DOWN:
+            if (y != 8) y++;
+            break;
+        case KEY_LEFT:
+            if (x != 0) x--;
+            break;
+        case KEY_RIGHT:
+            if (x != 8) x++;
+            break;
+        default:
+            if (buttonCode >= 48 && buttonCode <= 57) { // 0 - 9
+                playground[y][x] = buttonCode - '0'; // Convert ascii number to a real character
+            }
+            break;
         }
 
-        render(playground, x, y);
+        if (buttonCode == KEY_UP ||
+            buttonCode == KEY_DOWN ||
+            buttonCode == KEY_LEFT ||
+            buttonCode == KEY_RIGHT ||
+            (buttonCode >= 48 && buttonCode <= 57)
+        ) {
+            render(playground, x, y);
+        }
     }
 
     system("pause");

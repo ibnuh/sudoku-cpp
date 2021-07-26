@@ -166,7 +166,7 @@ namespace donkey {
  * YELLOW - Yellow (bright)
  * WHITE - White (bright)
  */
-enum {
+enum COLORS {
 	BLACK,
 	BLUE,
 	GREEN,

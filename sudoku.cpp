@@ -31,11 +31,18 @@ bool isUnique(int numbers[9]) {
     return true;
 }
 
+struct validationResult {
+    int part;
+    string type;
+    bool isValid;
+};
+
 // Validate each rows, columns, and squares by
 // putting them into a linear array and checking for duplicates
-bool validatePlayground(int playground[9][9]) {
-    // Check each rows for duplication
+validationResult validate(int playground[9][9]) {
+    validationResult validationResult;
 
+    // Check each rows for duplication
     for (int row = 0; row < 9; row++) {
         int numbers[9];
 
@@ -45,8 +52,13 @@ bool validatePlayground(int playground[9][9]) {
 
         if (!isUnique(numbers)) {
             donkey::locate(60, 15);
-            cout << "column " << row;
-            return false;
+            cout << "row " << row;
+
+            validationResult.isValid = false;
+            validationResult.type = "row";
+            validationResult.part = row;
+
+            return validationResult;
         }
     }
 
@@ -60,8 +72,13 @@ bool validatePlayground(int playground[9][9]) {
 
         if (!isUnique(numbers)) {
             donkey::locate(60, 16);
-            cout << "row " << row;
-            return false;
+            cout << "column " << row;
+
+            validationResult.isValid = false;
+            validationResult.type = "column";
+            validationResult.part = row;
+
+            return validationResult;
         }
     }
 
@@ -77,11 +94,19 @@ bool validatePlayground(int playground[9][9]) {
             if (!isUnique(numbers)) {
                 donkey::locate(60, 16);
                 cout << "square col:" << column << "row:" << row;
-                return false;
+
+                validationResult.isValid = false;
+                validationResult.type = "square";
+                validationResult.part = column;
+
+                return validationResult;
             }
         }
     }
-    return true;
+
+    validationResult.isValid = true;
+
+    return validationResult;
 }
 
 void render(int playground[9][9], int x, int y) {
@@ -119,12 +144,22 @@ void render(int playground[9][9], int x, int y) {
         gapX = 6,
         gapY = 2;
 
+    validationResult validation = validate(playground);
+
     for (int row = 0; row < 9; row++) {
         int screenY = initY + (row * gapY);
 
         for (int column = 0; column < 9; column++) {
             int screenX = initX + (column * gapX);
             int currentNumber = playground[row][column];
+
+            if (!validation.isValid && validation.type == "row" && validation.part == row) {
+                donkey::setColor(donkey::COLORS::RED);
+            }
+
+            if (!validation.isValid && validation.type == "column" && validation.part == column) {
+                donkey::setColor(donkey::COLORS::RED);
+            }
 
             donkey::locate(screenX, screenY);
 
@@ -141,10 +176,12 @@ void render(int playground[9][9], int x, int y) {
                     cout << " " << currentNumber << " ";
                 }
             }
+
+            donkey::setColor(donkey::COLORS::WHITE);
         }
     }
 
-    if (validatePlayground(playground)) {
+    if (validation.isValid) {
         donkey::locate(60, 17);
         cout << "Playground is valid" << endl;
     } else {
@@ -157,29 +194,29 @@ int main() {
 
     int x, y = 0;
 
-    //    int playground[9][9] = {
-    //		{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },
-    //		{ 0, 0, 5, 1, 0, 0, 0, 0, 0 },
-    //		{ 2, 8, 1, 7, 4, 5, 0, 9, 6 },
-    //		{ 0, 0, 0, 0, 7, 0, 0, 0, 0 },
-    //		{ 0, 0, 8, 0, 0, 9, 7, 6, 0 },
-    //		{ 0, 4, 0, 5, 0, 1, 0, 0, 8 },
-    //		{ 5, 0, 3, 9, 8, 4, 0, 7, 0 },
-    //		{ 6, 0, 4, 0, 6, 7, 0, 3, 1 },
-    //		{ 0, 0, 2, 0, 1, 0, 0, 0, 9 },
-    //	};
+    int playground[9][9] = {
+		{ 0, 0, 0, 0, 3, 2, 0, 5, 7 },
+		{ 0, 0, 5, 1, 0, 0, 0, 0, 0 },
+		{ 2, 8, 1, 7, 4, 5, 0, 9, 6 },
+		{ 0, 0, 0, 0, 7, 0, 0, 0, 0 },
+		{ 0, 0, 8, 0, 0, 9, 7, 6, 0 },
+		{ 0, 4, 0, 5, 0, 1, 0, 0, 8 },
+		{ 5, 0, 3, 9, 8, 4, 0, 7, 0 },
+		{ 6, 0, 4, 0, 6, 7, 0, 3, 1 },
+		{ 0, 0, 2, 0, 1, 0, 0, 0, 9 },
+	};
 
-    	int playground[9][9] = {
-    		{ 8, 7, 5, 9, 2, 1, 3, 4, 6 },
-    		{ 3, 6, 1, 7, 5, 4, 8, 9, 2 },
-    		{ 2, 4, 9, 8, 6, 3, 7, 1, 5 },
-    		{ 5, 8, 4, 6, 9, 7, 1, 2, 3 },
-    		{ 7, 1, 3, 2, 4, 8, 6, 5, 9 },
-    		{ 9, 2, 6, 1, 3, 5, 4, 8, 7 },
-    		{ 6, 9, 7, 4, 1, 2, 5, 3, 8 },
-    		{ 1, 5, 8, 3, 7, 9, 2, 6, 4 },
-    		{ 4, 3, 2, 5, 8, 6, 9, 7, 1 }
-    	};
+    //    	int playground[9][9] = {
+    //    		{ 8, 7, 5, 9, 2, 1, 3, 4, 6 },
+    //    		{ 3, 6, 1, 7, 5, 4, 8, 9, 2 },
+    //    		{ 2, 4, 9, 8, 6, 3, 7, 1, 5 },
+    //    		{ 5, 8, 4, 6, 9, 7, 1, 2, 3 },
+    //    		{ 7, 1, 3, 2, 4, 8, 6, 5, 9 },
+    //    		{ 9, 2, 6, 1, 3, 5, 4, 8, 7 },
+    //    		{ 6, 9, 7, 4, 1, 2, 5, 3, 8 },
+    //    		{ 1, 5, 8, 3, 7, 9, 2, 6, 4 },
+    //    		{ 4, 3, 2, 5, 8, 6, 9, 7, 1 }
+    //    	};
 
     // Render initial playground
     render(playground, x, y);

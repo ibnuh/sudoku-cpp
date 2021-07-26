@@ -32,7 +32,8 @@ bool isUnique(int numbers[9]) {
 }
 
 struct validationResult {
-    int part;
+    int col;
+    int row;
     string type;
     bool isValid;
 };
@@ -56,27 +57,27 @@ validationResult validate(int playground[9][9]) {
 
             validationResult.isValid = false;
             validationResult.type = "row";
-            validationResult.part = row;
+            validationResult.row = row;
 
             return validationResult;
         }
     }
 
     // Check each columns for duplication
-    for (int row = 0; row < 9; row++) {
+    for (int column = 0; column < 9; column++) {
         int numbers[9];
 
         for (int block = 0; block < 9; block++) {
-            numbers[block] = playground[block][row];
+            numbers[block] = playground[block][column];
         }
 
         if (!isUnique(numbers)) {
             donkey::locate(60, 16);
-            cout << "column " << row;
+            cout << "column " << column;
 
             validationResult.isValid = false;
             validationResult.type = "column";
-            validationResult.part = row;
+            validationResult.col = column;
 
             return validationResult;
         }
@@ -97,7 +98,8 @@ validationResult validate(int playground[9][9]) {
 
                 validationResult.isValid = false;
                 validationResult.type = "square";
-                validationResult.part = column;
+                validationResult.col = column;
+                validationResult.row = row;
 
                 return validationResult;
             }
@@ -153,11 +155,18 @@ void render(int playground[9][9], int x, int y) {
             int screenX = initX + (column * gapX);
             int currentNumber = playground[row][column];
 
-            if (!validation.isValid && validation.type == "row" && validation.part == row) {
+            if (!validation.isValid && validation.type == "row" && validation.row == row) {
                 donkey::setColor(donkey::COLORS::RED);
             }
 
-            if (!validation.isValid && validation.type == "column" && validation.part == column) {
+            if (!validation.isValid && validation.type == "column" && validation.col == column) {
+                donkey::setColor(donkey::COLORS::RED);
+            }
+            
+            if (!validation.isValid
+				&& validation.type == "square"
+				&& (validation.col <= column && validation.col+2 >= column)
+				&& (validation.row <= row && validation.row+2 >= row)) {
                 donkey::setColor(donkey::COLORS::RED);
             }
 
@@ -195,14 +204,14 @@ int main() {
     int x, y = 0;
 
     int playground[9][9] = {
-		{ 0, 0, 0, 0, 3, 2, 0, 5, 7 },
-		{ 0, 0, 5, 1, 0, 0, 0, 0, 0 },
+		{ 0, 0, 0, 9, 3, 2, 0, 5, 7 },
+		{ 0, 0, 5, 1, 9, 0, 0, 0, 0 },
 		{ 2, 8, 1, 7, 4, 5, 0, 9, 6 },
 		{ 0, 0, 0, 0, 7, 0, 0, 0, 0 },
 		{ 0, 0, 8, 0, 0, 9, 7, 6, 0 },
 		{ 0, 4, 0, 5, 0, 1, 0, 0, 8 },
-		{ 5, 0, 3, 9, 8, 4, 0, 7, 0 },
-		{ 6, 0, 4, 0, 6, 7, 0, 3, 1 },
+		{ 5, 0, 3, 0, 8, 4, 0, 7, 0 },
+		{ 0, 0, 4, 0, 6, 7, 0, 3, 1 },
 		{ 0, 0, 2, 0, 1, 0, 0, 0, 9 },
 	};
 

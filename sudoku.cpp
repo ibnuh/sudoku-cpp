@@ -19,14 +19,26 @@ using namespace std;
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 
+// https://stackoverflow.com/a/7560171/4460712
+int random(int min, int max) //range : [min, max]
+{
+   static bool first = true;
+   if (first) 
+   {  
+      srand( time(NULL) ); //seeding for the first time only!
+      first = false;
+   }
+   return min + rand() % (( max + 1 ) - min);
+}
+
 bool isUnique(int numbers[9]) {
     for (int i = 0; i < 9; i++) {
         if (numbers[i] == 0) continue;
 
         for (int j = i + 1; j < 9; j++) {
             if (numbers[i] == numbers[j]) {
-                donkey::locate(60, 14);
-                cout << numbers[i];
+                donkey::locate(60, 11);
+                cout << "Number " << numbers[i];
                 return false;
             }
         }
@@ -40,12 +52,15 @@ struct validationResult {
     int row;
     string type;
     bool isValid;
+    bool isCompleted;
 };
 
 // Validate each rows, columns, and squares by
 // putting them into a linear array and checking for duplicates
 validationResult validate(int playground[9][9]) {
     validationResult validationResult;
+    validationResult.isCompleted = false;
+    int sum;
 
     // Check each rows for duplication
     for (int row = 0; row < 9; row++) {
@@ -53,11 +68,13 @@ validationResult validate(int playground[9][9]) {
 
         for (int block = 0; block < 9; block++) {
             numbers[block] = playground[row][block];
+            
+            sum += numbers[block]; // To check whether the game is completed
         }
 
         if (!isUnique(numbers)) {
-            donkey::locate(60, 15);
-            cout << "row " << row;
+            donkey::locate(60, 10);
+            cout << "Row #" << row + 1;
 
             validationResult.isValid = false;
             validationResult.type = "row";
@@ -76,8 +93,8 @@ validationResult validate(int playground[9][9]) {
         }
 
         if (!isUnique(numbers)) {
-            donkey::locate(60, 16);
-            cout << "column " << column;
+            donkey::locate(60, 10);
+            cout << "Column #" << column + 1;
 
             validationResult.isValid = false;
             validationResult.type = "column";
@@ -97,8 +114,8 @@ validationResult validate(int playground[9][9]) {
             }
 
             if (!isUnique(numbers)) {
-                donkey::locate(60, 16);
-                cout << "square col:" << column << "row:" << row;
+                donkey::locate(60, 10);
+                cout << "Square" << endl;
 
                 validationResult.isValid = false;
                 validationResult.type = "square";
@@ -111,13 +128,15 @@ validationResult validate(int playground[9][9]) {
     }
 
     validationResult.isValid = true;
+    validationResult.isCompleted = sum == 45 * 9;
 
     return validationResult;
 }
 
 void render(int playground[9][9], int x, int y) {
     donkey::cls();
-
+    
+	donkey::setColor(donkey::COLORS::WHITE);
     cout << "   _____           _       _          " << endl;
     cout << "  / ____|         | |     | |         " << endl;
     cout << " | (___  _   _  __| | ___ | | ___   _ " << endl;
@@ -125,6 +144,7 @@ void render(int playground[9][9], int x, int y) {
     cout << "  ____) | |_| | (_| | (_) |   <| |_| | by M. IBNU LUTHFI AZHAR " << endl;
     cout << " |_____/ \\__,_|\\__,_|\\___/|_|\\_\\\\__,_| 200401067" << endl << endl;
 
+	donkey::setColor(donkey::COLORS::LIGHTBLUE);
     cout << " /-----------------/-----------------/-----------------/" << endl;
     cout << " |     |     |     |     |     |     |     |     |     |" << endl;
     cout << " -------------------------------------------------------" << endl;
@@ -145,6 +165,7 @@ void render(int playground[9][9], int x, int y) {
     cout << " |     |     |     |     |     |     |     |     |     |" << endl;
     cout << " /-----------------/-----------------/-----------------/" << endl;
 
+	donkey::setColor(donkey::COLORS::WHITE);
     const int initX = 4,
         initY = 9,
         gapX = 6,
@@ -194,13 +215,31 @@ void render(int playground[9][9], int x, int y) {
         }
     }
 
-    if (validation.isValid) {
-        donkey::locate(60, 17);
+    if (validation.isCompleted) {
+    	donkey::setColor(donkey::COLORS::GREEN);
+        donkey::locate(60, 9);
+        cout << "YOU'VE WON THE GAME" << endl;
+        donkey::locate(60, 10);
+        cout << "CONGRATULATIONS" << endl;
+    } else if (validation.isValid) {
+    	donkey::setColor(donkey::COLORS::GREEN);
+        donkey::locate(60, 9);
         cout << "Playground is valid" << endl;
-    } else {
-        donkey::locate(60, 17);
-        cout << "Duplicates" << endl;
+	} else {
+    	donkey::setColor(donkey::COLORS::RED);
+        donkey::locate(60, 9);
+        cout << "Duplicate found" << endl;
     }
+    
+    donkey::setColor(donkey::COLORS::LIGHTMAGENTA);
+    donkey::locate(60, 13);
+	cout << "Inputs" << endl;
+	donkey::locate(61, 14);
+	cout << " - Use the arrow buttons to move right/left/up/down" << endl;
+	donkey::locate(61, 15);
+	cout << " - Use 0 to remove number from the block" << endl;
+	donkey::locate(61, 16);
+	cout << " - Use 1-9 to input answer to the block" << endl;
 }
 
 int main() {
@@ -209,42 +248,42 @@ int main() {
     
     int playgrounds[3][9][9] = {
 		{
-			{ 9, 5, 7, 8, 1, 2, 3, 6, 4 },
-			{ 8, 4, 3, 7, 5, 6, 1, 2, 9 },
-			{ 2, 1, 6, 4, 3, 9, 5, 8, 7 },
-			{ 7, 6, 5, 3, 9, 4, 8, 1, 2 },
-			{ 4, 2, 1, 5, 7, 8, 9, 3, 6 },
-			{ 3, 8, 9, 2, 6, 1, 4, 7, 5 },
-			{ 5, 7, 8, 6, 4, 3, 2, 9, 1 },
-			{ 6, 9, 2, 1, 8, 5, 7, 4, 3 },
-			{ 1, 3, 4, 9, 2, 7, 6, 5, 8 },
+			{ 0, 5, 7, 8, 1, 2, 3, 0, 4 },
+			{ 8, 4, 0, 7, 5, 0, 1, 2, 9 },
+			{ 2, 1, 6, 4, 3, 9, 5, 0, 7 },
+			{ 7, 6, 0, 3, 9, 0, 8, 1, 2 },
+			{ 0, 2, 1, 5, 7, 8, 0, 3, 6 },
+			{ 3, 8, 9, 2, 0, 1, 4, 7, 5 },
+			{ 5, 7, 0, 6, 4, 3, 2, 9, 1 },
+			{ 0, 9, 0, 1, 8, 5, 0, 4, 3 },
+			{ 0, 3, 0, 9, 0, 7, 6, 5, 0 },
 		},
 		{
-			{ 1, 6, 8, 4, 3, 9, 7, 2, 5 },
-			{ 5, 7, 4, 8, 6, 2, 1, 9, 3 },
-			{ 2, 3, 9, 1, 5, 7, 8, 4, 6 },
-			{ 3, 9, 1, 5, 7, 6, 2, 8, 4 },
-			{ 7, 8, 2, 9, 4, 3, 6, 5, 1 },
-			{ 4, 5, 6, 2, 8, 1, 3, 7, 9 },
-			{ 6, 4, 5, 3, 2, 8, 9, 1, 7 },
-			{ 8, 1, 7, 6, 9, 4, 5, 3, 2 },
-			{ 9, 2, 3, 7, 1, 5, 4, 6, 8 },
+			{ 0, 6, 8, 4, 3, 9, 7, 2, 0 },
+			{ 0, 7, 4, 8, 0, 2, 1, 9, 3 },
+			{ 0, 3, 9, 0, 0, 7, 0, 4, 6 },
+			{ 3, 9, 1, 0, 7, 0, 2, 8, 4 },
+			{ 7, 8, 0, 9, 0, 3, 6, 5, 1 },
+			{ 0, 5, 6, 2, 0, 1, 0, 7, 0 },
+			{ 6, 0, 5, 3, 2, 8, 9, 1, 0 },
+			{ 8, 1, 0, 6, 0, 4, 5, 3, 2 },
+			{ 0, 2, 0, 7, 0, 5, 4, 6, 0 },
 		},
 		{
-			{ 9, 2, 3, 8, 4, 7, 1, 5, 6 },
-			{ 1, 8, 6, 2, 9, 5, 7, 4, 3 },
-			{ 5, 4, 7, 6, 3, 1, 9, 8, 2 },
-			{ 2, 5, 4, 3, 6, 9, 8, 7, 1 },
-			{ 7, 1, 9, 5, 2, 8, 3, 6, 4 },
-			{ 6, 3, 8, 7, 1, 4, 2, 9, 5 },
-			{ 3, 7, 5, 4, 8, 2, 6, 1, 9 },
-			{ 4, 9, 2, 1, 7, 6, 5, 3, 8 },
-			{ 8, 6, 1, 9, 5, 3, 4, 2, 7 },
+			{ 9, 2, 3, 0, 4, 7, 1, 5, 0 },
+			{ 1, 8, 6, 2, 0, 5, 7, 4, 3 },
+			{ 5, 0, 7, 6, 3, 1, 9, 0, 2 },
+			{ 0, 5, 4, 3, 6, 0, 8, 7, 1 },
+			{ 7, 1, 0, 0, 2, 8, 3, 6, 4 },
+			{ 0, 3, 8, 7, 1, 0, 2, 9, 5 },
+			{ 3, 7, 0, 4, 8, 0, 6, 1, 9 },
+			{ 4, 0, 2, 1, 7, 6, 5, 3, 8 },
+			{ 0, 6, 1, 9, 0, 3, 4, 0, 7 },
 		}
 	};
 
     int playground[9][9];
-    int randomNumber = rand() % 2;
+    int randomNumber = random(0, 2);
     
     memcpy(playground, playgrounds[randomNumber], sizeof(playground)); // Apparently this is how you assign an array to a variable in C++, bonkers
 

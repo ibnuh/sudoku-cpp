@@ -60,7 +60,7 @@ struct validationResult {
 validationResult validate(int playground[9][9]) {
     validationResult validationResult;
     validationResult.isCompleted = false;
-    int sum;
+    int sum = 0;
 
     // Check each rows for duplication
     for (int row = 0; row < 9; row++) {
@@ -222,7 +222,7 @@ void render(int playground[9][9], int x, int y) {
         donkey::locate(60, 10);
         cout << "CONGRATULATIONS" << endl;
     } else if (validation.isValid) {
-    	donkey::setColor(donkey::COLORS::GREEN);
+    	donkey::setColor(donkey::COLORS::YELLOW);
         donkey::locate(60, 9);
         cout << "Playground is valid" << endl;
 	} else {

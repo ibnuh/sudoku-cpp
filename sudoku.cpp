@@ -19,15 +19,11 @@ using namespace std;
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 
-// https://stackoverflow.com/a/7560171/4460712
-int random(int min, int max) //range : [min, max]
+
+int random(int min, int max)
 {
-   static bool first = true;
-   if (first) 
-   {  
-      srand( time(NULL) ); //seeding for the first time only!
-      first = false;
-   }
+   srand(time(NULL));
+   
    return min + rand() % (( max + 1 ) - min);
 }
 
